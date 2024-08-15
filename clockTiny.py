@@ -6,6 +6,10 @@
 # aurora warning
 # wifi connect
 
+# todo
+# add temprature
+# add weather forecast
+
 import time
 import machine
 import network
@@ -19,7 +23,7 @@ try:
     from clockTiny_config import WIFI_SSID, WIFI_PASSWORD, URL_TIDETIME, URL_AURORA, URL_WEATHER
     wifi_available = True
 except ImportError:
-    print("Create clockTiny_config.py with your WiFi credentials and localised URLs")
+    print("Create secrets.py with your WiFi credentials to get time from NTP")
     wifi_available = False
 
 ###############################################################################
@@ -229,9 +233,7 @@ def redraw_display_if_reqd():
         if ( minute % 10 == 0 and second == 0 ) or tides == "" or aurora == "":
             sync()            
         
-        maphics.drawClear()
-
-        displayMode = "Temp"
+        maphics.drawClear()        
     
         if (hour == 11 or hour == 23 ) and minute == 11:   
            tinyHeart()
