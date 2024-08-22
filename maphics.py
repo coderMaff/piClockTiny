@@ -123,6 +123,39 @@ def drawAurora(pAurora):
     return True
 
 ###############################################################################
+# Gemini Code
+
+def hex_to_rgb(hex_color):
+  hex_color = hex_color.lstrip('#')
+  rgb = tuple(int(hex_color[i:i+2], 16) for i in range(0, 6, 2))
+  return rgb
+
+###############################################################################
+
+def drawAurora2(pCurrent,pPrevious):
+        
+    print("Current",pCurrent)    
+    print("H2RGB",)
+    print("Previous",pPrevious)
+    
+    prevCol = hex_to_rgb(pPrevious)
+    PEN_PREV = graphics.create_pen(prevCol[0],prevCol[1],prevCol[2])
+    curCol = hex_to_rgb(pCurrent)
+    PEN_CURR = graphics.create_pen(curCol[0],curCol[1],curCol[2])
+    
+    graphics.set_pen(PEN_PREV)
+    graphics.rectangle(10,2,4,12)
+                   
+    graphics.set_pen(PEN_CURR)
+    graphics.rectangle(10,2,4,8)
+    graphics.pixel(10,10)
+    graphics.pixel(13,10)
+    
+    
+    return True
+
+
+###############################################################################
 
 def drawBeach(pHeight,pFin):
     pHeight += 3

@@ -1,5 +1,6 @@
 # maf 2024.08.06 Created
 # maf 2024.08.15 Seperated GFX out to maphics.py
+# maf 2024.08.18 Added Better XML feed for Aurora
 #
 # tinyClock with extra info
 # tide times
@@ -19,6 +20,7 @@ import maphics
 
 from stellar import StellarUnicorn
 
+
 try:
     from clockTiny_config import WIFI_SSID, WIFI_PASSWORD, URL_TIDETIME, URL_AURORA, URL_WEATHER
     wifi_available = True
@@ -33,6 +35,43 @@ def tinyAurora():
     if(aurora == ""): return
     
     maphics.drawAurora(int(aurora['locations']['karmoy']['kp']))
+
+    return True
+
+###############################################################################
+# Generated code by Gemini
+
+def tinyExtractStateNames(pXML):
+    # Find the starting and ending indices of the 'current' and 'previous' sections
+    start_current = pXML.index('<current>')
+    end_current = pXML.index('</current>')
+    start_previous = pXML.index('<previous>')
+    end_previous = pXML.index('</previous>')
+
+    # Extract the relevant parts of the XML
+    current_section = pXML[start_current:end_current + len('</current>')]
+    previous_section = pXML[start_previous:end_previous + len('</previous>')]
+
+    # Find the starting and ending indices of the 'name' attribute
+    start_name_current = current_section.index('color="') + len('color="')
+    end_name_current = current_section.index('"', start_name_current)
+    start_name_previous = previous_section.index('color="') + len('color="')
+    end_name_previous = previous_section.index('"', start_name_previous)
+
+    # Extract the state names
+    current_state = current_section[start_name_current:end_name_current]
+    previous_state = previous_section[start_name_previous:end_name_previous]
+
+    return current_state, previous_state
+
+###############################################################################
+
+def tinyAurora2():
+    global aurora
+    if(aurora == ""): return
+
+    currentState, previousState = tinyExtractStateNames(aurora)    
+    maphics.drawAurora2(currentState,previousState)
 
     return True
     
@@ -173,10 +212,10 @@ def sync():
             ntptime.settime()            
         
             response =requests.get(URL_AURORA)
-            print('Response code: ', response.status_code)
-            aurora = response.json()
+            print('Response code: ', response.status_code)            
+            aurora = response.content.decode('utf-8') #No XML manipulation available so do it with strings
             response.close()
-            print('Aurora JSON:', aurora)
+            print('Aurora XML:', aurora)
         
             response = requests.get(URL_TIDETIME)            
             print('Response code: ', response.status_code)                    
@@ -233,7 +272,9 @@ def redraw_display_if_reqd():
         if ( minute % 10 == 0 and second == 0 ) or tides == "" or aurora == "":
             sync()            
         
-        maphics.drawClear()        
+        maphics.drawClear()
+        
+        #displayMode = "Aurora"
     
         if (hour == 11 or hour == 23 ) and minute == 11:   
            tinyHeart()
@@ -250,7 +291,7 @@ def redraw_display_if_reqd():
             maphics.drawTinySnake(second,maphics.PEN_GREEN)
             tinyClockDraw("{:02}{:02}{:02}".format(hour, minute, second, day, month, year))
         elif displayMode == "Aurora":
-            tinyAurora()
+            tinyAurora2()
             maphics.drawTinySnake(second,maphics.PEN_WHITE)
             tinyClockDraw("{:02}{:02}{:02}".format(hour, minute, second, day, month, year))        
         else:
