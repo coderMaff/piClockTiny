@@ -274,6 +274,7 @@ def redraw_display_if_reqd():
         
         maphics.drawClear()
         
+        #debug
         #displayMode = "Aurora"
     
         if (hour == 11 or hour == 23 ) and minute == 11:   

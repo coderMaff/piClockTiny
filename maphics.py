@@ -144,16 +144,28 @@ def drawAurora2(pCurrent,pPrevious):
     PEN_CURR = graphics.create_pen(curCol[0],curCol[1],curCol[2])
     
     graphics.set_pen(PEN_PREV)
-    graphics.rectangle(10,2,4,12)
+    #graphics.rectangle(10,2,4,12)
                    
     graphics.set_pen(PEN_CURR)
-    graphics.rectangle(10,2,4,8)
-    graphics.pixel(10,10)
-    graphics.pixel(13,10)
+    #graphics.rectangle(10,2,4,8)
+    #graphics.pixel(10,10)
+    #graphics.pixel(13,10)
     
-    
-    return True
+    cloudText =  "01110" 
+    cloudText += "11111"
+    cloudText += "01110"
+    cloudText += "00300"
+    cloudText += "03330"
+    cloudText += "33333"
+    cloudText += "00300"
+    cloudText += "00300"
+    cloudText += "02220"
+    cloudText += "20002"
+    cloudText += "02220"
 
+    drawGrid(10,2,5,cloudText,PEN_BLACK, PEN_CURR, PEN_PREV, PEN_WHITE)    
+
+    return True
 
 ###############################################################################
 
@@ -198,7 +210,7 @@ def drawGrid(pX, pY, pW, pData, pCol0 = PEN_BACK, pCol1 = PEN_RED, pCol2 = PEN_B
         else:
             graphics.set_pen(pCol0)
 
-        graphics.pixel(pX + x,pY + y)        
+        graphics.pixel(pX + x, pY + y)        
         x+=1
         l+=1
         if x % pW == 0:
@@ -224,7 +236,7 @@ def drawNumeral(pC,pX,pY,pColBack = PEN_BACK, pCol = PEN_WHITE):
     elif pC == "4":
         drawGrid(pX,pY,3,"100100111",pColBack,pCol)
     elif pC == "5":
-        drawGrid(pX,pY,3,"101101010",pColBack,pCol)
+        drawGrid(pX,pY,3,"110111011",pColBack,pCol)
     elif pC == "6":
         drawGrid(pX,pY,3,"100111111",pColBack,pCol)
     elif pC == "7":
